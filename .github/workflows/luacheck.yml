@@ -9,4 +9,4 @@ jobs:
       - name: Luacheck linter
         uses: lunarmodules/luacheck@v1
         with:
-          args: . --exclude-files **/libs/** --no-max-line-length --no-global --ignore 6 self addon
+          args: . --exclude-files **/libs/** --no-max-line-length --no-global --ignore 6 self addon addonName

@@ -3,6 +3,20 @@
 ## Dependencies: Blizzard_PVPMatch
 ## Title: PvP Match Archives
 ## AddonCompartmentFunc: PvPMatchArchives_OnAddonCompartmentClick
+## Author: Teelo
+## Category: PvP
+## Category-deDE: PvP
+## Category-esES: JcJ
+## Category-esMX: JcJ
+## Category-frFR: JcJ
+## Category-itIT: PvP
+## Category-koKR: 전적
+## Category-ptBR: JxJ
+## Category-ruRU: PvP
+## Category-zhCN: PvP
+## Category-zhTW: PvP
+## X-Curse-Project-ID: 1422431
+## Version: @project-version@
 
 AddonCompartment.lua
 SetupDB.lua

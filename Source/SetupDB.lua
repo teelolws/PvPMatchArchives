@@ -360,6 +360,9 @@ addon.C_PvP = {
             return count
         end
     end,
+    GetMatchSavedTime = function()
+        return addon.DBSortedKeys[currentlySelectedIndex]
+    end,
 }
 setmetatable(addon.C_PvP, {
     __index = function(_, key)

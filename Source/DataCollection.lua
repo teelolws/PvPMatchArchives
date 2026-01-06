@@ -15,10 +15,7 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
     db.CanDisplayKillingBlows = C_PvP.CanDisplayKillingBlows()
     db.DoesMatchOutcomeAffectRating = C_PvP.DoesMatchOutcomeAffectRating()
     db.GetActiveBrawlInfo = C_PvP.GetActiveBrawlInfo()
-    
-    -- TODO: This is not currently shown anywhere by the default UI. Show it somewhere.
     db.GetActiveMatchDuration = C_PvP.GetActiveMatchDuration()
-    
     db.GetActiveMatchState = C_PvP.GetActiveMatchState()
     db.GetActiveMatchWinner = C_PvP.GetActiveMatchWinner()
     db.GetCustomVictoryStatID = C_PvP.GetCustomVictoryStatID()

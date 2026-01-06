@@ -119,7 +119,13 @@ function PVPMatchResultsMixin:Init()
 		factionIndex = 0;
 	end
 	self:SetupArtwork(factionIndex, isFactionalMatch);
+    
+    self.timestampText:SetText(date("%a %d %b %Y   %H:%M:%S", C_PvP.GetMatchSavedTime()))
 
+    local duration = C_PvP.GetActiveMatchDuration()
+    local minutes = floor(mod(duration, 3600)/60)
+    self.durationText:SetText(format(ITEM_DURATION_MIN, minutes))
+    
 	addon.ConstructPVPMatchTable(self.tableBuilder, not isFactionalMatch);
 end
 

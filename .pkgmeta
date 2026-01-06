@@ -1,0 +1,8 @@
+package-as: PvPMatchArchives
+
+move-folders:
+ PvPMatchArchives/Source: PvPMatchArchives
+
+ignore:
+ - LICENCE.md
+ - README.md

@@ -1,0 +1,12 @@
+## Interface: 110207
+## SavedVariables: PvPMatchArchiveDB
+## Dependencies: Blizzard_PVPMatch
+## Title: PvP Match Archives
+## AddonCompartmentFunc: PvPMatchArchives_OnAddonCompartmentClick
+
+AddonCompartment.lua
+SetupDB.lua
+DataCollection.lua
+PVPMatchUtil.lua
+PVPMatchResults.xml
+PVPMatchTable.lua

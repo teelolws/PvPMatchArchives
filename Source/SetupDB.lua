@@ -241,6 +241,13 @@ EventUtil.ContinueOnAddOnLoaded(addonName, function()
     addon.isDirty = true
 end)
 
+local function compareGuid(a, b)
+    if (not a.guid) or (not b.guid) then
+        return a.name < b.name
+    end
+    return a.guid < b.guid
+end
+
 local factionFilter = -1
 local sortTypes = {
     ["honorLevel"] = true,
@@ -249,7 +256,7 @@ local sortTypes = {
     ["stat2"] = function(toSort)
         table.sort(toSort, function(a, b)
             if a.stats[1].pvpStatValue == b.stats[1].pvpStatValue then
-                return a.guid < b.guid
+                return compareGuid(a, b)
             end
             return a.stats[1].pvpStatValue < b.stats[1].pvpStatValue
         end)
@@ -257,7 +264,7 @@ local sortTypes = {
     ["stat1"] = function(toSort)
         table.sort(toSort, function(a, b)
             if a.stats[2].pvpStatValue == b.stats[2].pvpStatValue then
-                return a.guid < b.guid
+                return compareGuid(a, b)
             end
             return a.stats[2].pvpStatValue < b.stats[2].pvpStatValue
         end)
@@ -280,7 +287,8 @@ local function doSort(toSort)
     if type(sortTypeColumn) == "string" then
         table.sort(toSort, function(a, b)
             if a[sortTypeColumn] == b[sortTypeColumn] then
-                return a.guid < b.guid
+                -- NPCs dont have guids (comp stomp brawl)
+                return compareGuid(a, b)
             end
             if sortInverse then
                 return a[sortTypeColumn] > b[sortTypeColumn]
@@ -291,7 +299,7 @@ local function doSort(toSort)
     elseif type(sortTypeColumn) == "boolean" then
         table.sort(toSort, function(a, b)
             if a[currentSortType] == b[currentSortType] then
-                return a.guid < b.guid
+                return compareGuid(a, b)
             end
             if sortInverse then
                 return a[currentSortType] > b[currentSortType]

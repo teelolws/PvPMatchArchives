@@ -410,6 +410,7 @@ end)
 
 addon.lastKnownWidgets = {}
 EventRegistry:RegisterFrameEventAndCallback("PLAYER_JOINED_PVP_MATCH", function()
+    if C_PvP.GetActiveMatchState() == Enum.PvPMatchState.Complete then return end
     wipe(addon.lastKnownWidgets)
 end)
 

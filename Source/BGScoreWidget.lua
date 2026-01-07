@@ -10,7 +10,7 @@ function ArchivePVPScoreWidgetMixin:OnLoad()
 	self:RegisterForWidgetSet(1);
 end
 
-function ArchivePVPScoreWidgetMixin:OnEvent(event, ...)
+function ArchivePVPScoreWidgetMixin:OnEvent()
 end
 
 function ArchivePVPScoreWidgetMixin:UpdateData()
@@ -130,18 +130,6 @@ function ArchivePVPScoreWidgetMixin:RegisterForWidgetSet(widgetSetID, widgetLayo
 	self.widgetSetLayoutDirection = self.forceWidgetSetLayoutDirection or widgetSetInfo.layoutDirection;
 	self.verticalAnchorYOffset = widgetSetInfo.verticalPadding;
 
-	if self.attachedUnit then
-		--C_UIWidgetManager.RegisterUnitForWidgetUpdates(self.attachedUnit, self.attachedUnitIsGuid);
-	end
-
 	self:ProcessAllWidgets();
-
-	--if self.showAndHideOnWidgetSetRegistration then
 	self:Show();
-	--end
-
-	--self:RegisterEvent("UPDATE_ALL_UI_WIDGETS");
-	--self:RegisterEvent("UPDATE_UI_WIDGET");
-
-	--UIWidgetManager:OnWidgetContainerRegistered(self);
 end

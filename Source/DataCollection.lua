@@ -62,7 +62,7 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
     db.UnitFactionGroup = UnitFactionGroup("player")
     
     db.lastKnownWidgets = addon.lastKnownWidgets
-    C_Timer.After(3, function()
+    C_Timer.After(1, function()
         db.lastKnownWidgets = addon.lastKnownWidgets
         addon.lastKnownWidgets = {}
     end)

@@ -407,3 +407,24 @@ end
 hooksecurefunc("SortBattlefieldScoreData", function(sortType)
     addon.SetSortType(sortType)
 end)
+
+addon.lastKnownWidgets = {}
+EventRegistry:RegisterFrameEventAndCallback("PLAYER_JOINED_PVP_MATCH", function()
+    wipe(addon.lastKnownWidgets)
+end)
+
+-- Valid widget types:
+-- 3 double fill up bar
+-- 14 double state icon row
+
+-- Known valid widget sets:
+-- 1671: AB double fill up bars 0/1500
+-- 1645: AB bases captured
+-- 1683 and 1689L kotmogu
+EventRegistry:RegisterFrameEventAndCallback("UPDATE_UI_WIDGET", function(_, widget)
+    if widget.widgetSetID ~= 1 then return end
+    local typeInfo = UIWidgetManager:GetWidgetTypeInfo(widget.widgetType)
+	local visInfo = typeInfo.visInfoDataFunction(widget.widgetID)
+    widget.visInfo = visInfo
+    addon.lastKnownWidgets[widget.widgetID] = widget
+end)

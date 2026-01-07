@@ -24,3 +24,4 @@ DataCollection.lua
 PVPMatchUtil.lua
 PVPMatchResults.xml
 PVPMatchTable.lua
+BGScoreWidget.xml

@@ -183,12 +183,6 @@
 						<Anchors>
 							<Anchor point="TOP" relativeKey="$parent.tabContainer" relativePoint="BOTTOM" y="-11"/>
 						</Anchors>
-            <Animations>
-              <AnimationGroup parentKey="FadeInAnim" setToFinalAlpha="true">
-								<Alpha fromAlpha="0" toAlpha="0" duration="0" order="1"/>
-                <Alpha startDelay=".35" fromAlpha="0" toAlpha="1" duration=".1" order="1"/>
-              </AnimationGroup>
-            </Animations>
 						<Frames>
 							<Frame parentKey="rewardsContainer" inherits="ResizeLayoutFrame">
 								<Size x="1" y="1"/>
@@ -321,7 +315,8 @@
 							</Frame>
 						</Frames>
 					</Frame>
-					<Frame parentKey="earningsArt">
+					<!--
+                    <Frame parentKey="earningsArt">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeKey="$parent.tabContainer" relativePoint="BOTTOMLEFT"/>
 							<Anchor point="TOPRIGHT" relativeKey="$parent.tabContainer" relativePoint="BOTTOMRIGHT"/>
@@ -365,6 +360,7 @@
 							</Layer>
 						</Layers>
 					</Frame>
+                    -->
 				</Frames>
 			</Frame>
 			<Frame parentKey="buttonContainer" inherits="ResizeLayoutFrame">

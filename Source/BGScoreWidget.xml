@@ -1,0 +1,10 @@
+<Ui>
+	<Script file="BGScoreWidget.lua"/>
+    
+    <Frame parentKey="WidgetFrame" toplevel="true" parent="ArchivePVPMatchResults" inherits="UIWidgetContainerTemplate" mixin="ArchivePVPScoreWidgetMixin">
+		<Size x="10" y="10"/>
+		<Anchors>
+			<Anchor point="TOPLEFT" x="60" y="-30"/>
+		</Anchors>
+	</Frame>
+</Ui>

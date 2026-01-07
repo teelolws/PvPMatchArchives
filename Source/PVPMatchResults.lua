@@ -34,9 +34,9 @@ function PVPMatchResultsMixin:OnLoad()
 	self.ratingFrame = self.progressContainer.rating;
 	self.ratingText = self.progressContainer.rating.text;
 	self.ratingButton = self.progressContainer.rating.button;
-	self.earningsArt = self.content.earningsArt;
-	self.earningsBackground = self.earningsArt.background;
-	self.tintFrames = {self.glowTop, self.earningsBackground, self.scrollBox.background};
+	--self.earningsArt = self.content.earningsArt;
+	--self.earningsBackground = self.earningsArt.background;
+	--self.tintFrames = {self.glowTop, self.earningsBackground, self.scrollBox.background};
 	self.progressFrames = {self.honorFrame, self.conquestFrame, self.ratingFrame};
 
 	self.header:SetShadowOffset(1,-1);
@@ -127,12 +127,13 @@ function PVPMatchResultsMixin:Init()
     self.durationText:SetText(format(ITEM_DURATION_MIN, minutes))
     
 	addon.ConstructPVPMatchTable(self.tableBuilder, not isFactionalMatch);
+    
+    self.WidgetFrame:UpdateData()
 end
 
 function PVPMatchResultsMixin:Shutdown()
 	self.isInitialized = false;
 	self.hasRewardTimerElapsed = false;
-	self.rewardTimer = false;
 	self.haveConquestData = false;
 	self.hasDisplayedRewards = false;
 	self.earningsContainer:Hide();
@@ -143,24 +144,11 @@ function PVPMatchResultsMixin:OnEvent()
 end
 
 function PVPMatchResultsMixin:BeginShow()
-	-- Get the conquest information if necessary. This will normally be cached
-	-- at the beginning of the match, but this is to deal with any rare cases
-	-- where the sparse item or treasure picker db's have been flushed on us.
 	self.haveConquestData = self:HaveConquestData();
-
-	-- See POST_MATCH_ITEM_REWARD_UPDATE
-	if not self.hasRewardTimerElapsed and not self.rewardTimer then
-		self.rewardTimer = C_Timer.NewTimer(1.0, 
-			function()
-				self.rewardTimer = nil;
-				self.hasRewardTimerElapsed = true;
-				self:DisplayRewards();
-			end
-		);
-	end
-
 	self:Init();
 	ShowUIPanel(self);
+    self.hasRewardTimerElapsed = true;
+	self:DisplayRewards();
 end
 
 function PVPMatchResultsMixin:DisplayRewards()
@@ -254,25 +242,6 @@ function PVPMatchResultsMixin:DisplayRewards()
 	if showItems or showProgress then
 		self.earningsContainer:Show();
 		self.earningsContainer:MarkDirty();
-		self.earningsContainer.FadeInAnim:Play();
-		self.earningsArt.BurstBgAnim:Play();
-
-		local AddDelayToAnimations = function(delay, ...)
-			for animIndex = 1, select("#", ...) do
-				local anim = select(animIndex, ...);
-				if not anim.initialStartDelay then
-					anim.initialStartDelay = anim:GetStartDelay() or 0;
-				end
-				anim:SetStartDelay(anim.initialStartDelay + delay);
-			end
-		end
-
-		local itemStartDelay = .35;
-		for itemFrame in self.itemPool:EnumerateActive() do
-			local animGroup = itemFrame.IconAnim;
-			AddDelayToAnimations(itemStartDelay, animGroup:GetAnimations());
-			animGroup:Play();
-		end
 	end
 end
 
@@ -379,9 +348,9 @@ function PVPMatchResultsMixin:SetupArtwork(factionIndex, isFactionalMatch)
 	end
 
 	local r, g, b = color:GetRGB();
-	for _, frame in pairs(self.tintFrames) do
-		frame:SetVertexColor(r, g, b);
-	end
+	--for _, frame in pairs(self.tintFrames) do
+	--	frame:SetVertexColor(r, g, b);
+	--end
 
 	NineSliceUtil.ApplyLayoutByName(self, theme.nineSliceLayout);
 end

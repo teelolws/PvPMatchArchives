@@ -63,6 +63,9 @@ function PVPMatchResultsMixin:OnLoad()
 	self.tableBuilder:SetHeaderContainer(self.scrollCategories);
 
 	PVPMatchUtil.InitScrollBox(self.scrollBox, self.scrollBar, self.tableBuilder);
+    
+    -- Makes frame hide when Escape is pressed
+    tinsert(UISpecialFrames, self:GetName())
 end
 
 function PVPMatchResultsMixin:Init()
@@ -276,7 +279,12 @@ function PVPMatchResultsMixin:OnHide()
 end
 
 function PVPMatchResultsMixin:AddItemReward(item)
-	local frame = self.itemPool:Acquire();
+    if not item or (not item.link) then return end
+    do
+        local _, itemLink = GetItemInfo(item.link)
+        if not itemLink then return end
+    end
+	local frame = self.itemPool:Acquire()
 
 	local unusedSpecID = nil;
 	local isCurrency = item.type == "currency";
@@ -346,11 +354,6 @@ function PVPMatchResultsMixin:SetupArtwork(factionIndex, isFactionalMatch)
 		local useAlternateColor = not isFactionalMatch;
 		color = PVPMatchStyle.GetTeamColor(factionIndex, useAlternateColor);
 	end
-
-	local r, g, b = color:GetRGB();
-	--for _, frame in pairs(self.tintFrames) do
-	--	frame:SetVertexColor(r, g, b);
-	--end
 
 	NineSliceUtil.ApplyLayoutByName(self, theme.nineSliceLayout);
 end

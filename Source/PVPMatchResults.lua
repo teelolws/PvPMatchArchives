@@ -346,14 +346,6 @@ function PVPMatchResultsMixin:SetupArtwork(factionIndex, isFactionalMatch)
 	end
 
 	themeDecoration:SetShown(isFactionalMatch);
-	
-	local color;
-	if C_PvP.GetCustomVictoryStatID() > 0 then
-		color = PVPMatchStyle.PurpleColor;
-	else
-		local useAlternateColor = not isFactionalMatch;
-		color = PVPMatchStyle.GetTeamColor(factionIndex, useAlternateColor);
-	end
 
 	NineSliceUtil.ApplyLayoutByName(self, theme.nineSliceLayout);
 end

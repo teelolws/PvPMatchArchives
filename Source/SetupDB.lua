@@ -248,25 +248,48 @@ local function compareGuid(a, b)
     return a.guid < b.guid
 end
 
+local sortInverse = false
+local function compareNormalInverse(a, b)
+    if sortInverse then
+        return a > b
+    else
+        return a < b
+    end
+end
+
 local factionFilter = -1
 local sortTypes = {
     ["honorLevel"] = true,
     ["class"] = "className",
     ["name"] = true,
-    ["stat2"] = function(toSort)
-        table.sort(toSort, function(a, b)
-            if a.stats[1].pvpStatValue == b.stats[1].pvpStatValue then
-                return compareGuid(a, b)
-            end
-            return a.stats[1].pvpStatValue < b.stats[1].pvpStatValue
-        end)
-    end,
     ["stat1"] = function(toSort)
         table.sort(toSort, function(a, b)
-            if a.stats[2].pvpStatValue == b.stats[2].pvpStatValue then
-                return compareGuid(a, b)
+            if a.stats[1].pvpStatID < a.stats[2].pvpStatID then
+                if a.stats[1].pvpStatValue == b.stats[1].pvpStatValue then
+                    return compareGuid(a, b)
+                end
+                return compareNormalInverse(a.stats[1].pvpStatValue, b.stats[1].pvpStatValue)
+            else
+                if a.stats[2].pvpStatValue == b.stats[2].pvpStatValue then
+                    return compareGuid(a, b)
+                end
+                return compareNormalInverse(a.stats[2].pvpStatValue, b.stats[2].pvpStatValue)
             end
-            return a.stats[2].pvpStatValue < b.stats[2].pvpStatValue
+        end)
+    end,
+    ["stat2"] = function(toSort)
+        table.sort(toSort, function(a, b)
+            if a.stats[1].pvpStatID < a.stats[2].pvpStatID then
+                if a.stats[2].pvpStatValue == b.stats[2].pvpStatValue then
+                    return compareGuid(a, b)
+                end
+                return compareNormalInverse(a.stats[2].pvpStatValue, b.stats[2].pvpStatValue)
+            else
+                if a.stats[1].pvpStatValue == b.stats[1].pvpStatValue then
+                    return compareGuid(a, b)
+                end
+                return compareNormalInverse(a.stats[1].pvpStatValue, b.stats[1].pvpStatValue)
+            end
         end)
     end,
     ["kills"] = "killingBlows",
@@ -280,7 +303,6 @@ local sortTypes = {
     ["bgratingChange"] = "ratingChange",
 }
 local currentSortType
-local sortInverse = false
 
 local function doSort(toSort)
     local sortTypeColumn = sortTypes[currentSortType]
@@ -290,22 +312,14 @@ local function doSort(toSort)
                 -- NPCs dont have guids (comp stomp brawl)
                 return compareGuid(a, b)
             end
-            if sortInverse then
-                return a[sortTypeColumn] > b[sortTypeColumn]
-            else
-                return a[sortTypeColumn] < b[sortTypeColumn]
-            end
+            return compareNormalInverse(a[sortTypeColumn], b[sortTypeColumn])
         end)
     elseif type(sortTypeColumn) == "boolean" then
         table.sort(toSort, function(a, b)
             if a[currentSortType] == b[currentSortType] then
                 return compareGuid(a, b)
             end
-            if sortInverse then
-                return a[currentSortType] > b[currentSortType]
-            else
-                return a[currentSortType] < b[currentSortType]
-            end
+            return compareNormalInverse(a[currentSortType], b[currentSortType])
         end)
     elseif type(sortTypeColumn) == "function" then
         sortTypeColumn(toSort)

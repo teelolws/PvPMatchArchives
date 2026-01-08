@@ -258,40 +258,36 @@ local function compareNormalInverse(a, b)
 end
 
 local factionFilter = -1
+
+local function sortStatColumn(columnName, toSort)
+    -- sometimes the column stored in the DB doesn't match the column sorted code
+    -- eg stat2 could be stored in column 1
+    -- have to check the .orderIndex to confirm
+    local columnID = string.match(columnName, "%d")
+    columnID = columnID - 1
+    local actualColumn = 1
+    for i = 1, 3 do
+        if toSort[1].stats[i] and (toSort[1].stats[i].orderIndex == columnID) then
+            actualColumn = i
+            break
+        end
+    end
+    
+    table.sort(toSort, function(a, b)
+        if a.stats[actualColumn].pvpStatValue == b.stats[actualColumn].pvpStatValue then
+            return compareGuid(a, b)
+        end
+        return compareNormalInverse(a.stats[actualColumn].pvpStatValue, b.stats[actualColumn].pvpStatValue)
+    end)
+end
+
 local sortTypes = {
     ["honorLevel"] = true,
     ["class"] = "className",
     ["name"] = true,
-    ["stat1"] = function(toSort)
-        table.sort(toSort, function(a, b)
-            if a.stats[1].pvpStatID < a.stats[2].pvpStatID then
-                if a.stats[1].pvpStatValue == b.stats[1].pvpStatValue then
-                    return compareGuid(a, b)
-                end
-                return compareNormalInverse(a.stats[1].pvpStatValue, b.stats[1].pvpStatValue)
-            else
-                if a.stats[2].pvpStatValue == b.stats[2].pvpStatValue then
-                    return compareGuid(a, b)
-                end
-                return compareNormalInverse(a.stats[2].pvpStatValue, b.stats[2].pvpStatValue)
-            end
-        end)
-    end,
-    ["stat2"] = function(toSort)
-        table.sort(toSort, function(a, b)
-            if a.stats[1].pvpStatID < a.stats[2].pvpStatID then
-                if a.stats[2].pvpStatValue == b.stats[2].pvpStatValue then
-                    return compareGuid(a, b)
-                end
-                return compareNormalInverse(a.stats[2].pvpStatValue, b.stats[2].pvpStatValue)
-            else
-                if a.stats[1].pvpStatValue == b.stats[1].pvpStatValue then
-                    return compareGuid(a, b)
-                end
-                return compareNormalInverse(a.stats[1].pvpStatValue, b.stats[1].pvpStatValue)
-            end
-        end)
-    end,
+    ["stat1"] = sortStatColumn,
+    ["stat2"] = sortStatColumn,
+    ["stat3"] = sortStatColumn,
     ["kills"] = "killingBlows",
     ["hk"] = "honorableKills",
     ["deaths"] = true,
@@ -322,7 +318,7 @@ local function doSort(toSort)
             return compareNormalInverse(a[currentSortType], b[currentSortType])
         end)
     elseif type(sortTypeColumn) == "function" then
-        sortTypeColumn(toSort)
+        sortTypeColumn(currentSortType, toSort)
     end
 end
 

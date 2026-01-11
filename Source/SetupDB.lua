@@ -258,20 +258,24 @@ local function compareNormalInverse(a, b)
 end
 
 local factionFilter = -1
+local function sortByOrderIndex(statsField)
+    statsField = CopyTable(statsField)
+    for k, v in pairs(statsField) do
+        v.originalIndex = k
+    end
+    table.sort(statsField, function(a, b)
+        return a.orderIndex < b.orderIndex
+    end)
+    return statsField
+end
 
 local function sortStatColumn(columnName, toSort)
     -- sometimes the column stored in the DB doesn't match the column sorted code
     -- eg stat2 could be stored in column 1
     -- have to check the .orderIndex to confirm
-    local columnID = string.match(columnName, "%d")
-    columnID = columnID - 1
-    local actualColumn = 1
-    for i = 1, 3 do
-        if toSort[1].stats[i] and (toSort[1].stats[i].orderIndex == columnID) then
-            actualColumn = i
-            break
-        end
-    end
+    local columnID = tonumber(string.match(columnName, "%d"))
+    local statsFieldSorted = sortByOrderIndex(toSort[1].stats)
+    local actualColumn = statsFieldSorted[columnID].originalIndex
     
     table.sort(toSort, function(a, b)
         if a.stats[actualColumn].pvpStatValue == b.stats[actualColumn].pvpStatValue then
@@ -288,6 +292,8 @@ local sortTypes = {
     ["stat1"] = sortStatColumn,
     ["stat2"] = sortStatColumn,
     ["stat3"] = sortStatColumn,
+    ["stat4"] = sortStatColumn,
+    ["stat5"] = sortStatColumn,
     ["kills"] = "killingBlows",
     ["hk"] = "honorableKills",
     ["deaths"] = true,

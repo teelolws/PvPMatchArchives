@@ -248,7 +248,7 @@ local function compareGuid(a, b)
     return a.guid < b.guid
 end
 
-local sortInverse = false
+local sortInverse = true
 local function compareNormalInverse(a, b)
     if sortInverse then
         return a > b
@@ -416,6 +416,8 @@ end
 function addon.SetSortType(sortType)
     if currentSortType == sortType then
         sortInverse = not sortInverse
+    else
+        sortInverse = true
     end
     currentSortType = sortType
     addon.isDirty = true

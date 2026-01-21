@@ -8,11 +8,8 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
     PvPMatchArchiveDB[timestamp] = db
     table.insert(addon.DBSortedKeys, timestamp)
     
-    db.CanDisplayDamage = C_PvP.CanDisplayDamage()
     db.CanDisplayDeaths = C_PvP.CanDisplayDeaths()
-    db.CanDisplayHealing = C_PvP.CanDisplayHealing()
     db.CanDisplayHonorableKills = C_PvP.CanDisplayHonorableKills()
-    db.CanDisplayKillingBlows = C_PvP.CanDisplayKillingBlows()
     db.DoesMatchOutcomeAffectRating = C_PvP.DoesMatchOutcomeAffectRating()
     db.GetActiveBrawlInfo = C_PvP.GetActiveBrawlInfo()
     db.GetActiveMatchDuration = C_PvP.GetActiveMatchDuration()

@@ -17,6 +17,11 @@
 ## Category-zhTW: PvP
 ## X-Curse-Project-ID: 1422431
 ## Version: @project-version@
+## AllowAddOnTableAccess: 1
+
+libs\LibStub\LibStub.lua
+libs\AceSerializer-3.0\AceSerializer-3.0.xml
+libs\LibDeflate\lib.xml
 
 AddonCompartment.lua
 SetupDB.lua

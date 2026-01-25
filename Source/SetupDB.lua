@@ -1,7 +1,11 @@
 local addonName, addon = ...
 
+local libS = LibStub:GetLibrary("AceSerializer-3.0")
+local LibDeflate = LibStub:GetLibrary("LibDeflate")
+
 local currentlySelectedIndex
 addon.DBSortedKeys = {}
+addon.cacheDB = {}
 
 EventUtil.ContinueOnAddOnLoaded(addonName, function()
     if not PvPMatchArchiveDB then
@@ -232,8 +236,23 @@ EventUtil.ContinueOnAddOnLoaded(addonName, function()
         }
     end
     
-    for timestamp in pairs(PvPMatchArchiveDB) do
+    for timestamp, data in pairs(PvPMatchArchiveDB) do
         table.insert(addon.DBSortedKeys, timestamp)
+        setmetatable(data, {
+            __index = function(_, key)
+                if not rawget(data, "compressed") then return end
+                if not addon.cacheDB[timestamp] then
+                    local serialisedDB = LibDeflate:DecompressZlib(data.compressed)
+                    local success, result = libS:Deserialize(serialisedDB)
+                    if not success then
+                        --print("PvPMatchArchives: Deserialization error")
+                    end
+                    addon.cacheDB[timestamp] = result
+                end
+                
+                return addon.cacheDB[timestamp][key]
+            end,
+        })
     end
     table.sort(addon.DBSortedKeys)
     

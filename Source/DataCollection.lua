@@ -1,5 +1,8 @@
 local addonName, addon = ...
 
+local libS = LibStub:GetLibrary("AceSerializer-3.0")
+local LibDeflate = LibStub:GetLibrary("LibDeflate")
+
 EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
 	if C_Commentator.IsSpectating() then return end
 
@@ -62,5 +65,19 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
     C_Timer.After(1, function()
         db.lastKnownWidgets = addon.lastKnownWidgets
         addon.lastKnownWidgets = {}
+        
+        -- to cut down on saved variable usage, lets serialize and compress all the data we just collected
+        local serialisedDB = libS:Serialize(db)
+        local compressedDB = LibDeflate:CompressZlib(serialisedDB)
+        addon.cacheDB[timestamp] = db
+        db = {}
+        PvPMatchArchiveDB[timestamp] = db
+        db.compressed = compressedDB
+        
+        setmetatable(db, {
+            __index = function(_, key)
+                return addon.cacheDB[timestamp][key]
+            end,
+        })
     end)
 end)

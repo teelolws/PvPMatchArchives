@@ -243,10 +243,7 @@ EventUtil.ContinueOnAddOnLoaded(addonName, function()
                 if not rawget(data, "compressed") then return end
                 if not addon.cacheDB[timestamp] then
                     local serialisedDB = LibDeflate:DecompressZlib(data.compressed)
-                    local success, result = libS:Deserialize(serialisedDB)
-                    if not success then
-                        --print("PvPMatchArchives: Deserialization error")
-                    end
+                    local _, result = libS:Deserialize(serialisedDB)
                     addon.cacheDB[timestamp] = result
                 end
                 

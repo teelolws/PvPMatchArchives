@@ -20,7 +20,6 @@
 
 libs\LibStub\LibStub.lua
 libs\AceSerializer-3.0\AceSerializer-3.0.xml
-libs\LibDeflate\lib.xml
 
 AddonCompartment.lua
 SetupDB.lua

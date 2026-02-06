@@ -1,7 +1,6 @@
 local addonName, addon = ...
 
 local libS = LibStub:GetLibrary("AceSerializer-3.0")
-local LibDeflate = LibStub:GetLibrary("LibDeflate")
 
 local currentlySelectedIndex
 addon.DBSortedKeys = {}
@@ -242,7 +241,7 @@ EventUtil.ContinueOnAddOnLoaded(addonName, function()
             __index = function(_, key)
                 if not rawget(data, "compressed") then return end
                 if not addon.cacheDB[timestamp] then
-                    local serialisedDB = LibDeflate:DecompressZlib(data.compressed)
+                    local serialisedDB = C_EncodingUtil.DecompressString(data.compressed, 1)
                     local _, result = libS:Deserialize(serialisedDB)
                     addon.cacheDB[timestamp] = result
                 end

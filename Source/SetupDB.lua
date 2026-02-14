@@ -1,14 +1,12 @@
 local addonName, addon = ...
 
-local libS = LibStub:GetLibrary("AceSerializer-3.0")
-
 local currentlySelectedIndex
 addon.DBSortedKeys = {}
 addon.cacheDB = {}
 
 EventUtil.ContinueOnAddOnLoaded(addonName, function()
-    if not PvPMatchArchiveDB then
-        PvPMatchArchiveDB = {
+    if not PvPMatchArchiveDB2 then
+        PvPMatchArchiveDB2 = {
             [1] = {
                 ["IsMatchComplete"] = true,
                 ["GetActiveMatchDuration"] = 9001,
@@ -235,15 +233,14 @@ EventUtil.ContinueOnAddOnLoaded(addonName, function()
         }
     end
     
-    for timestamp, data in pairs(PvPMatchArchiveDB) do
+    for timestamp, data in pairs(PvPMatchArchiveDB2) do
         table.insert(addon.DBSortedKeys, timestamp)
         setmetatable(data, {
             __index = function(_, key)
-                if not rawget(data, "compressed") then return end
+                if not rawget(data, "compressedCBOR") then return end
                 if not addon.cacheDB[timestamp] then
-                    local serialisedDB = C_EncodingUtil.DecompressString(data.compressed, 1)
-                    local _, result = libS:Deserialize(serialisedDB)
-                    addon.cacheDB[timestamp] = result
+                    local serialisedDB = C_EncodingUtil.DecompressString(data.compressedCBOR, 1)
+                    addon.cacheDB[timestamp] = C_EncodingUtil.DeserializeCBOR(serialisedDB)
                 end
                 
                 return addon.cacheDB[timestamp][key]
@@ -367,23 +364,23 @@ end
 addon.C_PvP = {
     GetHonorRewardInfo = C_PvP.GetHonorRewardInfo,
     IsPlayerGuid = function(guid)
-        return PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]][C_PvP.GetPlayerGuid()] == guid
+        return PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]][C_PvP.GetPlayerGuid()] == guid
     end,
     GetScoreInfo = function(index)
         if (not currentSortType) or (not sortTypes[currentSortType]) then
-            return applyFactionFilter(PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo)[index]
+            return applyFactionFilter(PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo)[index]
         end
         
-        local toSort = applyFactionFilter(PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo)
+        local toSort = applyFactionFilter(PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo)
         doSort(toSort)
         return toSort[index]
     end,
     GetNumBattlefieldScores = function()
         if factionFilter == -1 then
-            return PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]].GetNumBattlefieldScores
+            return PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]].GetNumBattlefieldScores
         elseif factionFilter == 1 then
             local count = 0
-            for _, data in pairs(PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo) do
+            for _, data in pairs(PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo) do
                 if data.faction == 1 then
                     count = count + 1
                 end
@@ -391,7 +388,7 @@ addon.C_PvP = {
             return count
         else
             local count = 0
-            for _, data in pairs(PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo) do
+            for _, data in pairs(PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]].GetScoreInfo) do
                 if data.faction == 0 then
                     count = count + 1
                 end
@@ -405,7 +402,7 @@ addon.C_PvP = {
 }
 setmetatable(addon.C_PvP, {
     __index = function(_, key)
-        return function() return PvPMatchArchiveDB[addon.DBSortedKeys[currentlySelectedIndex]][key] end
+        return function() return PvPMatchArchiveDB2[addon.DBSortedKeys[currentlySelectedIndex]][key] end
     end,
 })
 

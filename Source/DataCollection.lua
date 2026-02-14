@@ -1,13 +1,13 @@
 local addonName, addon = ...
 
-local libS = LibStub:GetLibrary("AceSerializer-3.0")
+local serializeOptions = {ignoreSerializationErrors = true}
 
 EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
 	if C_Commentator.IsSpectating() then return end
 
     local db = {}
     local timestamp = GetServerTime()
-    PvPMatchArchiveDB[timestamp] = db
+    PvPMatchArchiveDB2[timestamp] = db
     table.insert(addon.DBSortedKeys, timestamp)
     
     db.CanDisplayDeaths = C_PvP.CanDisplayDeaths()
@@ -66,12 +66,12 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
         addon.lastKnownWidgets = {}
         
         -- to cut down on saved variable usage, lets serialize and compress all the data we just collected
-        local serialisedDB = libS:Serialize(db)
+        local serialisedDB = C_EncodingUtil.SerializeCBOR(db, serializeOptions)
         local compressedDB = C_EncodingUtil.CompressString(serialisedDB, 1)
         addon.cacheDB[timestamp] = db
         db = {}
-        PvPMatchArchiveDB[timestamp] = db
-        db.compressed = compressedDB
+        PvPMatchArchiveDB2[timestamp] = db
+        db.compressedCBOR = compressedDB
         
         setmetatable(db, {
             __index = function(_, key)

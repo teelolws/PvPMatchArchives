@@ -1,5 +1,5 @@
 ## Interface: 120001
-## SavedVariables: PvPMatchArchiveDB
+## SavedVariables: PvPMatchArchiveDB2
 ## Dependencies: Blizzard_PVPMatch
 ## Title: PvP Match Archives
 ## AddonCompartmentFunc: PvPMatchArchives_OnAddonCompartmentClick
@@ -18,9 +18,6 @@
 ## X-Curse-Project-ID: 1422431
 ## Version: @project-version@
 
-libs\LibStub\LibStub.lua
-libs\AceSerializer-3.0\AceSerializer-3.0.xml
-
 AddonCompartment.lua
 SetupDB.lua
 DataCollection.lua
@@ -28,3 +25,4 @@ PVPMatchUtil.lua
 PVPMatchResults.xml
 PVPMatchTable.lua
 BGScoreWidget.xml
+ClearDatabase.lua

@@ -22,7 +22,7 @@ end)
 local confirmationNum = 0
 function addon.ClearDatabasePrompt()
     local text = "This will clear the entire database, then reload your UI.\nAre you "
-    for i = 1, confirmationNum do
+    for _ = 1, confirmationNum do
         text = text.."really "
     end
     text = text.."sure?"

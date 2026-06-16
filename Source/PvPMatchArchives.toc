@@ -1,4 +1,4 @@
-## Interface: 120005
+## Interface: 120007
 ## SavedVariables: PvPMatchArchiveDB2
 ## Dependencies: Blizzard_PVPMatch
 ## Title: PvP Match Archives

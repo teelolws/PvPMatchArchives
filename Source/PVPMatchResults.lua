@@ -117,7 +117,7 @@ function PVPMatchResultsMixin:Init()
 
 	-- For Solo Shuffle brawl.
 	if hasCustomVictoryStatID then
-		addon.SetSortType("stat1");
+        addon.SetSortType("stat1");
 
 		factionIndex = 0;
 	end
@@ -135,7 +135,6 @@ function PVPMatchResultsMixin:Init()
 end
 
 function PVPMatchResultsMixin:Shutdown()
-	self.isInitialized = false;
 	self.hasRewardTimerElapsed = false;
 	self.haveConquestData = false;
 	self.hasDisplayedRewards = false;

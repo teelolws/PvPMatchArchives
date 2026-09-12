@@ -19,8 +19,6 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
     db.GetActiveMatchWinner = C_PvP.GetActiveMatchWinner()
     db.GetCustomVictoryStatID = C_PvP.GetCustomVictoryStatID()
     db.GetMatchPVPStatColumns = C_PvP.GetMatchPVPStatColumns()
-    db.GetPostMatchCurrencyRewards = C_PvP.GetPostMatchCurrencyRewards()
-    db.GetPostMatchItemRewards = C_PvP.GetPostMatchItemRewards()
     
     db.GetPVPActiveMatchPersonalRatedInfo = C_PvP.GetPVPActiveMatchPersonalRatedInfo()
     if db.GetPVPActiveMatchPersonalRatedInfo then
@@ -62,6 +60,12 @@ EventRegistry:RegisterFrameEventAndCallback("PVP_MATCH_COMPLETE", function()
     
     db.lastKnownWidgets = addon.lastKnownWidgets
     C_Timer.After(1, function()
+        -- see function PVPMatchResultsMixin:BeginShow()
+        -- Collection of these two need to be on a 1 second delay
+        -- Check Blizzard_PVPMatch\PVPMatchResults.lua as this is on their list to fix
+        db.GetPostMatchCurrencyRewards = C_PvP.GetPostMatchCurrencyRewards()
+        db.GetPostMatchItemRewards = C_PvP.GetPostMatchItemRewards()
+        
         db.lastKnownWidgets = addon.lastKnownWidgets
         addon.lastKnownWidgets = {}
         

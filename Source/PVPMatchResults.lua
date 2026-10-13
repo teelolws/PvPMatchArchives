@@ -279,7 +279,7 @@ end
 function PVPMatchResultsMixin:AddItemReward(item)
     if not item or (not item.link) then return end
     do
-        local _, itemLink = GetItemInfo(item.link)
+        local _, itemLink = C_Item.GetItemInfo(item.link)
         if not itemLink then return end
     end
 	local frame = self.itemPool:Acquire()
